@@ -1,0 +1,45 @@
+group 'io.github.acschil'
+version "${version}"
+
+apply plugin: 'idea'
+apply plugin: 'java'
+apply plugin: 'groovy'
+apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management'
+
+compileJava {
+    // todo: target java 12 if possible
+    sourceCompatibility = '1.8'
+    targetCompatibility = '1.8'
+}
+
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile "org.codehaus.groovy:groovy-all:${groovyVersion}"
+
+    // todo: switch to a non-blocking framework https://spring.io/guides/gs/reactive-rest-service/
+    compile("org.springframework.boot:spring-boot-starter-web:${springBootVersion}")
+
+    testCompile "org.spockframework:spock-core:${spockVersio}"
+}
+
+task appVersion {
+    doLast {
+        println "Built version=${version}"
+    }
+}
+
+build.finalizedBy(appVersion)
+
