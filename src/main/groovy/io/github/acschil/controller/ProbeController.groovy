@@ -6,14 +6,14 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 class ProbeController {
 
-    @RequestMapping("/liveness")
+    @RequestMapping('/liveness')
     String livenessProbe() {
-        return "Alive";
+        return 'Alive'
     }
 
-    @RequestMapping("/readiness")
+    @RequestMapping('/readiness')
     String readinessProbe() {
-        return "Ready";
+        return 'Ready'
     }
 
 }
