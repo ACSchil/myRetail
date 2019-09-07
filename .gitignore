@@ -31,3 +31,6 @@ gradle/
 
 # Build
 build
+
+#logs
+${sys:logs.dir}

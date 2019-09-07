@@ -30,8 +30,9 @@ dependencies {
     compile "org.codehaus.groovy:groovy-all:${groovyVersion}"
 
     // todo: switch to a non-blocking framework https://spring.io/guides/gs/reactive-rest-service/
-    compile("org.springframework.boot:spring-boot-starter-web:${springBootVersion}")
-
+    compile "org.springframework.boot:spring-boot-starter-web:${springBootVersion}"
+    compile 'org.springframework.boot:spring-boot-starter-log4j2'
+    compile 'org.apache.logging.log4j:log4j-web:2.12.1'
 
     //region testCompile
     testCompile "org.spockframework:spock-core:${spockVersion}"
@@ -44,6 +45,10 @@ dependencies {
     //endregion
 }
 
+configurations {
+    all*.exclude module : 'spring-boot-starter-logging'
+}
+
 task appVersion {
     doLast {
         println "Built version=${version}"
@@ -53,8 +58,7 @@ task appVersion {
 build.finalizedBy(appVersion)
 
 test {
-    afterTest { desc, result ->
-        logger.quiet "[${desc.className}] - ${desc.name} - ${result.resultType}"
+    testLogging {
+        events "passed", "skipped", "failed"
     }
 }
-

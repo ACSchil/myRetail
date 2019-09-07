@@ -6,10 +6,18 @@ class ProbeWebSpec extends BaseWebSpec {
 
     def "application's liveness check responds with 'Alive'"() {
         when:
-        String livenessResult = Request.Get(getAppBaseUri() + '/liveness').execute().returnContent().asString()
+        String result = Request.Get(getAppBaseUri() + '/probe/liveness').execute().returnContent().asString()
 
         then:
-        livenessResult == 'Alive'
+        result == 'Alive'
+    }
+
+    def "application's readiness check responds with 'Ready'"() {
+        when:
+        String result = Request.Get(getAppBaseUri() + '/probe/readiness').execute().returnContent().asString()
+
+        then:
+        result == 'Ready'
     }
 
 }

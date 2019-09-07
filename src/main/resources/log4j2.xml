@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="INFO">
+    <Appenders>
+        <Console name="console" target="SYSTEM_OUT">
+            <PatternLayout>
+                <Pattern>%d{yyyy-MM-dd HH:mm:ss} %-5p %m%n</Pattern>
+            </PatternLayout>        </Console>
+        <RollingFile name="rollingFile" fileName="${sys:logs.dir}/app.log" filePattern="${sys:logs.dir}/app-%d{yyyy-MM-dd}.log">
+            <PatternLayout>
+                <!-- https://logging.apache.org/log4j/log4j-2.0/manual/layouts.html -->
+                <Pattern>%d{yyyy-MM-dd HH:mm:ss.SSSZ}{America/Chicago} %highlight{%p} %style{%C{1.} [%t] %m}{bold,green}%n</Pattern>
+            </PatternLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1"/>
+            </Policies>
+            <DefaultRolloverStrategy max="5" />
+        </RollingFile>
+    </Appenders>
+    <Loggers>
+        <Root level="INFO">
+            <AppenderRef ref="console" />
+            <AppenderRef ref="rollingFile"/>
+        </Root>
+    </Loggers>
+</Configuration>
