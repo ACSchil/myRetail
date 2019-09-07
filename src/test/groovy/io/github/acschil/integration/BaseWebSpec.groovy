@@ -13,24 +13,27 @@ import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMoc
 class BaseWebSpec extends Specification {
 
     @Value('${server.port}')
-    private String port
+    private String applicationPort
 
-//    private static WireMockServer wireMockServer = new WireMockServer(wireMockConfig().port(8181))
-//
-//    void setupSpec() {
-//        wireMockServer.start()
-//    }
-//
-//    void cleanup() {
-//        WireMock.reset()
-//    }
-//
-//    void cleanupSpec() {
-//        wireMockServer.stop()
-//    }
+    private static final int STUB_PORT = 8181
+
+    private static WireMockServer wireMockServer = new WireMockServer(STUB_PORT)
+
+    void setupSpec() {
+        WireMock.configureFor(STUB_PORT)
+        wireMockServer.start()
+    }
+
+    void cleanup() {
+        WireMock.reset()
+    }
+
+    void cleanupSpec() {
+        wireMockServer.stop()
+    }
 
     String getAppBaseUri() {
-        return "http://localhost:${port}"
+        return "http://localhost:${applicationPort}"
     }
 
 }
