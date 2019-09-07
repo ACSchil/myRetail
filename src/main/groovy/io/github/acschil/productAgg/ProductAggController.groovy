@@ -8,11 +8,13 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 class ProductAggController {
+
     @Autowired
-    ProductAggService productAggService
+    private ProductAggService productAggService
 
     @GetMapping(path = '/products/{id}', produces = 'application/json')
     @ResponseBody ProductAggData getProduct(@PathVariable long id) {
         return  productAggService.getProduct(id)
     }
+
 }

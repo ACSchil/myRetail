@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 @RequestMapping('/probe')
 class ProbeController {
+
     @GetMapping('/liveness')
     String livenessProbe() {
         return 'Alive'
@@ -18,4 +19,5 @@ class ProbeController {
         // todo connect to cassandra cluster
         return 'Ready'
     }
+
 }

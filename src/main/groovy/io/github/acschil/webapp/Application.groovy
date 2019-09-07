@@ -5,6 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.context.annotation.ComponentScan
 
 @ComponentScan([
+    'io.github.acschil.cassandra',
     'io.github.acschil.productAgg',
     'io.github.acschil.productDetails',
     'io.github.acschil.productPrice',

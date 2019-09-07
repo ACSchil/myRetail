@@ -29,10 +29,15 @@ repositories {
 dependencies {
     compile "org.codehaus.groovy:groovy-all:${groovyVersion}"
 
-    // todo: switch to a non-blocking framework https://spring.io/guides/gs/reactive-rest-service/
-    compile "org.springframework.boot:spring-boot-starter-web:${springBootVersion}"
-    compile 'org.springframework.boot:spring-boot-starter-log4j2'
+    compile "org.springframework.boot:spring-boot-starter-web:${springBootVersion}" // todo: switch to a non-blocking framework https://spring.io/guides/gs/reactive-rest-service/
+
+    // Logging
     compile 'org.apache.logging.log4j:log4j-web:2.12.1'
+    compile 'org.springframework.boot:spring-boot-starter-log4j2'
+
+    // Cassandra
+    compile('org.springframework.boot:spring-boot-starter-data-cassandra')
+    compile 'com.codahale.metrics:metrics-core:3.0.2' // for jmx metrics
 
     //region testCompile
     testCompile "org.spockframework:spock-core:${spockVersion}"
@@ -42,6 +47,7 @@ dependencies {
     testCompile "com.github.tomakehurst:wiremock-jre8:2.24.1"
     testCompile "org.apache.httpcomponents:httpclient:4.5.9"
     testCompile 'org.apache.httpcomponents:fluent-hc:4.5.9'
+    // https://github.com/jsevellec/cassandra-unit // todo look into
     //endregion
 }
 

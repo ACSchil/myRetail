@@ -8,8 +8,9 @@ import org.springframework.web.client.HttpClientErrorException
 @Log4j2
 @Service
 class ProductDetailsService {
+
     @Autowired
-    ProductDetailsClient productDetailsClient
+    private ProductDetailsClient productDetailsClient
 
     ProductDetails getProductDetails(long id) {
         Map productDetailsResponse
@@ -29,4 +30,5 @@ class ProductDetailsService {
 
         return new ProductDetails(name: productName)
     }
+
 }
