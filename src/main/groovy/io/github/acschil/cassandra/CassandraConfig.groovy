@@ -15,13 +15,13 @@ import org.springframework.data.cassandra.repository.config.EnableCassandraRepos
 class CassandraConfig extends AbstractCassandraConfiguration {
 
     @Value('${cassandra.contactPoints}')
-    private String contactPoints
+    String contactPoints
 
     @Value('${cassandra.port}')
-    private int port
+    int port
 
     @Value('${cassandra.keyspaceName}')
-    private String keyspaceName
+    String keyspaceName
 
     @Override
     protected String getKeyspaceName() {
@@ -30,12 +30,13 @@ class CassandraConfig extends AbstractCassandraConfiguration {
 
     @Override
     SchemaAction getSchemaAction() {
-        return SchemaAction.CREATE_IF_NOT_EXISTS;
+        return SchemaAction.CREATE_IF_NOT_EXISTS
     }
 
-    protected List<CreateKeyspaceSpecification> getCreateKeyspaceSpecifications() {
+    protected List<CreateKeyspaceSpecification> getKeyspaceCreationSpecs() {
         return [
-                CreateKeyspaceSpecification.createKeyspace(keyspaceName)
+                CreateKeyspaceSpecification
+                        .createKeyspace(keyspaceName)
                         .ifNotExists()
                         .withSimpleReplication(1)
         ]
@@ -45,7 +46,7 @@ class CassandraConfig extends AbstractCassandraConfiguration {
     CassandraClusterFactoryBean cluster() {
         CassandraClusterFactoryBean cluster =
                 new CassandraClusterFactoryBean()
-        cluster.setKeyspaceCreations(getCreateKeyspaceSpecifications());
+        cluster.setKeyspaceCreations(getKeyspaceCreationSpecs())
         cluster.setContactPoints(contactPoints)
         cluster.setPort(port)
         return cluster

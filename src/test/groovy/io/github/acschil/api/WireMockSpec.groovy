@@ -1,4 +1,4 @@
-package io.github.acschil.integration
+package io.github.acschil.api
 
 import org.apache.http.client.fluent.Request
 

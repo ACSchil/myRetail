@@ -11,30 +11,31 @@ import org.springframework.stereotype.Service
 class ProductAggService {
 
     @Autowired
-    private ProductDetailsService productDetailsService
+    ProductDetailsService productDetailsService
 
     @Autowired
-    private ProductPriceService productPriceService
+    ProductPriceService productPriceService
 
     ProductAggData getProduct(long id) {
-        ProductDetails productDetails
+        // todo, parallel async calls
 
-        // todo async calls
+        List<String> errors = []
+
+        ProductDetails productDetails
         try {
             productDetails = productDetailsService.getProductDetails(id)
         } catch (Exception e) {
-            // todo handle exceptions
+            errors.add(e.getMessage())
         }
 
         ProductPrice productPrice
         try {
             productPrice = productPriceService.getProductPrice(id)
         } catch (Exception e) {
-            // todo handle exceptions
+            errors.add(e.getMessage())
         }
 
-        // todo get price
-        return new ProductAggData(id: id, name: productDetails?.name, current_price: productPrice)
+        return new ProductAggData(id: id, name: productDetails?.name, current_price: productPrice, errors: errors)
     }
 
 }

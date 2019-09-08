@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController
 class ProductAggController {
 
     @Autowired
-    private ProductAggService productAggService
+    ProductAggService productAggService
 
     @GetMapping(path = '/products/{id}', produces = 'application/json')
     @ResponseBody ProductAggData getProduct(@PathVariable long id) {

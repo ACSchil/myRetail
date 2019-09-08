@@ -10,7 +10,7 @@ import org.springframework.web.client.HttpClientErrorException
 class ProductDetailsService {
 
     @Autowired
-    private ProductDetailsClient productDetailsClient
+    ProductDetailsClient productDetailsClient
 
     ProductDetails getProductDetails(long id) {
         Map productDetailsResponse

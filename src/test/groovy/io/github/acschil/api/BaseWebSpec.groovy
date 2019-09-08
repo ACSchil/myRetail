@@ -1,4 +1,4 @@
-package io.github.acschil.integration
+package io.github.acschil.api
 
 import com.datastax.driver.core.Cluster
 import com.datastax.driver.core.Session
