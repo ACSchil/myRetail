@@ -55,7 +55,7 @@ For local development, the application can also be run with a remote debugging p
 
 `./gradlew bootRun --debug-jvm`
 
-and connect to it with you IDE.
+and connect to it with your IDE.
 
 ### Using Dockerized Cassandra
 
@@ -86,3 +86,11 @@ Now hydrate the data store (assumes cqlsh is installed):
 The service runs on port `8080`. 
 
 To determine the application has come up, hit: `localhost:8080/probe/liveness` - it should respond with an http status code of `200` and a body of `Alive`
+
+To update a product's price, `PUT` the new price to `/products/{id}`, e.g.
+
+`curl -XPUT -H "Content-Type: application/json" -d '{"price":13.49}' http://localhost:8080/products/13860428`
+
+To fetch an aggregation of the product details and price, perform a `GET` against `/products/{id}`, e.g.
+
+`curl http://localhost:8080/products/13860428`
