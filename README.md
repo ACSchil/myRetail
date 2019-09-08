@@ -85,4 +85,4 @@ Now hydrate the data store (assumes cqlsh is installed):
 
 The service runs on port `8080`. 
 
-To determine the application has come up, hit: `localhost:8080/liveness` - it should respond with a statusCode of 200, and a body of `Alive`
+To determine the application has come up, hit: `localhost:8080/probe/liveness` - it should respond with an http status code of `200` and a body of `Alive`
