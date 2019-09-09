@@ -9,8 +9,8 @@ class ProductPriceServiceSpec extends Specification {
 
     def "updateProductPrice"() {
         setup:
-        ProductPrice price = new ProductPrice(price: 11.01)
-        ProductPriceCassandraDTO dto = new ProductPriceCassandraDTO(productId: 117, price: 11.01)
+        ProductPrice price = new ProductPrice(value: 11.01)
+        ProductPriceCassandraDTO dto = new ProductPriceCassandraDTO(productId: 117, value: 11.01)
 
         when:
         service.updateProductPrice(117, price)
@@ -21,17 +21,27 @@ class ProductPriceServiceSpec extends Specification {
 
     def "getProductPrice"() {
         setup:
-        ProductPrice price = new ProductPrice(price: 11.01)
-        ProductPriceCassandraDTO dto = new ProductPriceCassandraDTO(productId: 117, price: 11.01)
+        ProductPriceCassandraDTO dto = new ProductPriceCassandraDTO(productId: 117, value: 11.01)
         Optional<ProductPriceCassandraDTO> expected = Optional.of(dto)
 
         when:
-        ProductPrice productPrice = service.getProductPrice(117)
+        ProductPrice result = service.getProductPrice(117)
 
         then:
-        productPrice.price == 11.01
+        result.value == 11.01
+        result.currency_code == 'USD'
 
         1 * priceRepositoryMock.findById(117) >> expected
+    }
+
+    def "getProductPrice - failure"() {
+        when:
+        service.getProductPrice(117)
+
+        then:
+        thrown(ProductPriceFetchException)
+
+        1 * priceRepositoryMock.findById(117) >> { throw new RuntimeException('uh oh...') }
     }
 
 }

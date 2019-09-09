@@ -4,6 +4,7 @@ import io.github.acschil.productDetails.ProductDetails
 import io.github.acschil.productDetails.ProductDetailsFetchException
 import io.github.acschil.productDetails.ProductDetailsService
 import io.github.acschil.productPrice.ProductPrice
+import io.github.acschil.productPrice.ProductPriceFetchException
 import io.github.acschil.productPrice.ProductPriceService
 import spock.lang.Specification
 
@@ -19,7 +20,7 @@ class ProductAggServiceSpec extends Specification {
     def "getProduct"() {
         setup:
         ProductDetails productDetails = new ProductDetails(name: 'Dragon Ball Z')
-        ProductPrice productPrice = new ProductPrice(price: 3.99)
+        ProductPrice productPrice = new ProductPrice(value: 3.99)
         ProductAggData expectedProductAggData = new ProductAggData(
                 id: 9001,
                 name: 'Dragon Ball Z',
@@ -39,12 +40,12 @@ class ProductAggServiceSpec extends Specification {
 
     def "getProduct - cannot get details"() {
         setup:
-        ProductPrice productPrice = new ProductPrice(price: 3.99)
+        ProductPrice productPrice = new ProductPrice(value: 3.99)
         ProductAggData expectedProductAggData = new ProductAggData(
                 id: 9001,
                 name: null,
                 current_price: productPrice,
-                errors: ['Product Details service is down.']
+                errors: [['ProductDetailsFetchException': 'Product Details service is down.']]
         )
 
         when:
@@ -64,7 +65,7 @@ class ProductAggServiceSpec extends Specification {
                 id: 9001,
                 name: 'Dragon Ball Z',
                 current_price: null,
-                errors: ['DataAccessException thrown']
+                errors: [['ProductPriceFetchException': 'Table does not exist']]
         )
 
         when:
@@ -74,18 +75,16 @@ class ProductAggServiceSpec extends Specification {
         result == expectedProductAggData
 
         1 * productDetailsServiceMock.getProductDetails(9001) >> productDetails
-        1 * productPriceServiceMock.getProductPrice(9001) >> { throw new RuntimeException('DataAccessException thrown') }
+        1 * productPriceServiceMock.getProductPrice(9001) >> { throw new ProductPriceFetchException('Table does not exist') }
     }
 
     def "getProduct - cannot get price or details"() {
         setup:
-        ProductDetails productDetails = new ProductDetails(name: 'Dragon Ball Z')
-        ProductPrice productPrice = new ProductPrice(price: 3.99)
         ProductAggData expectedProductAggData = new ProductAggData(
                 id: 9001,
                 name: null,
                 current_price: null,
-                errors: ['Product Details service is down.', 'DataAccessException thrown']
+                errors: [['ProductDetailsFetchException': 'Product Details service is down.'], ['ProductPriceFetchException': 'Table does not exist']]
         )
 
         when:
@@ -95,6 +94,6 @@ class ProductAggServiceSpec extends Specification {
         result == expectedProductAggData
 
         1 * productDetailsServiceMock.getProductDetails(9001) >> { throw new ProductDetailsFetchException('Product Details service is down.') }
-        1 * productPriceServiceMock.getProductPrice(9001) >> { throw new RuntimeException('DataAccessException thrown') }
+        1 * productPriceServiceMock.getProductPrice(9001) >> { throw new ProductPriceFetchException('Table does not exist') }
     }
 }

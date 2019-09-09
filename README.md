@@ -17,12 +17,12 @@ Build an application that performs the following actions:
     - Example response: `{"id":13860428,"name":"The Big Lebowski (Blu-ray) (Widescreen)","current_price":{"value": 13.49,"currency_code":"USD"}}`
 - Performs an HTTP `GET` to retrieve the product name from an external API. (For this exercise the data will come from `redsky.target.com`, but let’s just pretend this is an internal resource hosted by myRetail)  
     - Example: `http://redsky.target.com/v2/pdp/tcin/13860428?excludes=taxonomy,price,promotion,bulk_ship,rating_and_review_reviews,rating_and_review_statistics,question_answer_statistics`
-- Reads pricing information from a NoSQL data store and combines it with the product id and name from the HTTP request into a single response.  
+- Reads pricing information from a NoSQL data store and combines it with the product ID and name from the HTTP request into a single response.  
 - **BONUS:** Accepts an HTTP `PUT` request at the same path (`/products/{id}`), containing a JSON request body similar to the `GET` response, and updates the product’s price in the data store.  
 
 ## Building
 
-The application targets Java 8. Installing JDK 8 is a prerequisite to building
+The application targets Java 8. Installing JDK 8 is a prerequisite to building.
 
 From the project root, run
 
@@ -34,7 +34,7 @@ which will also print the application version built.
 
 Every build runs the tests. 
 
-There are two flavors of tests. Unit and integration. Integration tests spin up the Spring Boot application, and make requests against it. External API requests are mocked using WireMock. Both flavors of tests are written using Spock. The integration tests have a dependency on an external Cassandra cluster. See [Using Dockerized Cassandra](#using-dockerized-cassandra)  below. 
+There are two flavors of tests -- both written using Spock -- unit and integration. Integration tests spin up the Spring Boot application, and make requests against it. External API requests are mocked using WireMock. The integration tests have a dependency on an external Cassandra cluster, see [Using Dockerized Cassandra](#using-dockerized-cassandra) below. 
 
 To run the tests without building: 
 
@@ -43,11 +43,11 @@ To run the tests without building:
 
 ## Running
 
-This is a Spring Boot application. After building run:
+This is a Spring Boot application. After building, run:
 
 `java -jar build/libs/myRetail-{version}.jar`
 
-Where version comes form the build step. The version can be determined by inspecting `gradle.properties` or looking in `./build/libs/`
+where `version` comes from the build step. The version can be determined by inspecting `gradle.properties` or looking in `./build/libs/`
 
 ### Remote Debugging
 
@@ -74,22 +74,22 @@ Now hydrate the data store (assumes cqlsh is installed):
 - Create a new table for price data: 
 `CREATE TABLE IF NOT EXISTS myRetail.productPrice (
     productId bigint,
-    price decimal,
+    value decimal,
     PRIMARY KEY (productId)
 );`
 - Insert a product, e.g.: 
-`INSERT INTO productPrice( productId, price ) values( 13860428, 14.99 );`
+`INSERT INTO productPrice( productId, value ) values( 13860428, 14.99 );`
                                       
 
 ## Interacting
 
 The service runs on port `8080`. 
 
-To determine the application has come up, hit: `localhost:8080/probe/liveness` - it should respond with an http status code of `200` and a body of `Alive`
+To determine if the application has come up, hit `localhost:8080/probe/liveness` - it should respond with an HTTP status code of `200` and a body of `Alive`
 
 To update a product's price, `PUT` the new price to `/products/{id}`, e.g.
 
-`curl -XPUT -H "Content-Type: application/json" -d '{"price":13.49}' http://localhost:8080/products/13860428`
+`curl -XPUT -H "Content-Type: application/json" -d '{"value":13.49}' http://localhost:8080/products/13860428`
 
 To fetch an aggregation of the product details and price, perform a `GET` against `/products/{id}`, e.g.
 

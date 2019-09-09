@@ -2,6 +2,7 @@ package io.github.acschil.api
 
 import com.datastax.driver.core.Cluster
 import com.datastax.driver.core.Session
+import com.fasterxml.jackson.databind.ObjectMapper
 import com.github.tomakehurst.wiremock.WireMockServer
 import com.github.tomakehurst.wiremock.client.WireMock
 import io.github.acschil.productPrice.ProductPriceCassandraDTO
@@ -23,13 +24,13 @@ class BaseWebSpec extends Specification {
 
     private Session session
 
+    private ObjectMapper objectMapper
+
     private static final String applicationPort = 8080
 
     private static final String keyspaceName = 'myRetailTest'
 
     private static int stubPort = 8181
-
-    private static final String redskyBaseUri = "http://localhost:${stubPort}/v2/pdp/tcin/"
 
     @Autowired
     private CassandraAdminTemplate adminTemplate
@@ -40,6 +41,7 @@ class BaseWebSpec extends Specification {
     }
 
     void setup() {
+        adminTemplate.dropTable(true, CqlIdentifier.of('productPrice'))
         adminTemplate.createTable(true, CqlIdentifier.of('productPrice'), ProductPriceCassandraDTO, [:])
     }
 
@@ -50,19 +52,26 @@ class BaseWebSpec extends Specification {
 
     void cleanup() {
         WireMock.reset()
-        adminTemplate.dropTable(CqlIdentifier.of('productPrice'));
+        adminTemplate.dropTable(true, CqlIdentifier.of('productPrice'))
     }
 
     String getAppBaseUri() {
         return "http://localhost:${applicationPort}"
     }
 
-    String getRedSkyBaseUri() {
-        return redskyBaseUri
+    String getRedSkyProductDetailsURI(long id) {
+        return "/v2/pdp/tcin/${id}?excludes=taxonomy,price,promotion,bulk_ship,rating_and_review_reviews,rating_and_review_statistics,question_answer_statistics"
     }
 
     CassandraAdminTemplate getCassandraAdminTemplate() {
         return adminTemplate
+    }
+
+    ObjectMapper getObjectMapper() {
+        if (!objectMapper) {
+            objectMapper = new ObjectMapper()
+        }
+        return objectMapper
     }
 
     private getCassandraSession() {

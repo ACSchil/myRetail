@@ -17,22 +17,21 @@ class ProductAggService {
     ProductPriceService productPriceService
 
     ProductAggData getProduct(long id) {
-        // todo, parallel async calls
 
-        List<String> errors = []
+        List<Map<String, String>> errors = []
 
         ProductDetails productDetails
         try {
             productDetails = productDetailsService.getProductDetails(id)
         } catch (Exception e) {
-            errors.add(e.getMessage())
+            errors.add([(e.getClass().simpleName): e.getMessage()])
         }
 
         ProductPrice productPrice
         try {
             productPrice = productPriceService.getProductPrice(id)
         } catch (Exception e) {
-            errors.add(e.getMessage())
+            errors.add([(e.getClass().simpleName): e.getMessage()])
         }
 
         return new ProductAggData(id: id, name: productDetails?.name, current_price: productPrice, errors: errors)

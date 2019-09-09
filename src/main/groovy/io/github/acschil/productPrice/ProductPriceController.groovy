@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
 
+import javax.validation.Valid
+
 @RestController
 class ProductPriceController {
 
@@ -16,7 +18,7 @@ class ProductPriceController {
 
     @PutMapping(path = '/products/{id}', consumes = 'application/json')
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
-    void putPrice(@PathVariable long id, @RequestBody ProductPrice newPrice) {
+    void putPrice(@PathVariable long id, @RequestBody @Valid ProductPrice newPrice) {
         productPriceService.updateProductPrice(id, newPrice)
     }
 

@@ -11,6 +11,6 @@ class ProductPriceCassandraDTO {
     @PrimaryKey
     Long productId
 
-    BigDecimal price
+    BigDecimal value
 
 }

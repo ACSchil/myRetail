@@ -9,7 +9,7 @@ class ProductPriceControllerSpec extends Specification {
 
     def "putPrice"() {
         setup:
-        ProductPrice productPrice = new ProductPrice(price: 12.37)
+        ProductPrice productPrice = new ProductPrice(value: 12.37)
 
         when:
         controller.putPrice(101, productPrice)

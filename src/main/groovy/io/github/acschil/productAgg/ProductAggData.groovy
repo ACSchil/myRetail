@@ -12,6 +12,6 @@ class ProductAggData {
 
     ProductPrice current_price
 
-    List<String> errors = []
+    List<Map<String, String>> errors
 
 }
