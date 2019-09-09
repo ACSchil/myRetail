@@ -94,3 +94,41 @@ To update a product's price, `PUT` the new price to `/products/{id}`, e.g.
 To fetch an aggregation of the product details and price, perform a `GET` against `/products/{id}`, e.g.
 
 `curl http://localhost:8080/products/13860428`
+
+### Docker
+
+This project can run as a container. The `Dockerfile` builds an image for deployment in a GCP Kubernetes cluster. To build the image, run:
+
+`./gradlew clean build && docker build .`
+
+Then tag the image (to find the image id, run `docker images`):
+
+`docker tag {imageId} {user-name}/my-retail:{version}}`
+
+and push it up to Docker Hub:
+
+`docker push {username}/my-retail`
+
+Here's its current location: https://hub.docker.com/r/sirschilly/my-retail
+
+### Interacting With the Deployed Service
+
+This application has been deployed on Google Kubernetes Engine (GKE). At the time of this writing there is a 3 node Cassandra cluster and a single node deployment of the the myRetail web api. 
+
+It is accessible at: http://34.70.191.115
+
+- Heartbeat: http://34.70.191.115/probes/liveness
+- Getting a product: `http://34.70.191.115/products/{id}`, e.g. http://34.70.191.115/products/13860428
+
+## Outstanding Work
+
+- CI/CD pipeline 
+- Smoke tests and monitoring/alerting
+- Source control for Kubernetes configs
+- Kubernetes config for Cassandra cluster should setup tables
+- Auto-scaling policies
+- Liveness/Readiness probes
+- Support for dynamic configuration
+- Performance tuning
+- Security considerations
+    - Move traffic to 443
